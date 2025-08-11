@@ -1,8 +1,8 @@
 
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.servlet.DefaultServlet;
 
 public class Main {
     public static void main(String[] args) throws Exception {
@@ -11,8 +11,12 @@ public class Main {
         ServletContextHandler handler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         handler.setContextPath("/");
 
-        // Asociar el servlet con la ruta "/hola"
-        handler.addServlet(new ServletHolder(new HelloServlet()), "/hola");
+
+    // Asociar el servlet con la ruta "/hola"
+    handler.addServlet(new ServletHolder(new HelloServlet()), "/hola");
+
+    // Asociar el servlet con la ruta "/guardar"
+    handler.addServlet(new ServletHolder(new GuardarServlet()), "/guardar");
 
         // Configurar servlet para archivos estáticos
         ServletHolder defaultServlet = new ServletHolder("default", DefaultServlet.class);
