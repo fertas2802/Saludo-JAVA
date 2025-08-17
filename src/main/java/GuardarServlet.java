@@ -11,13 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class GuardarServlet extends HttpServlet {
-    private static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres";
-    private static final String DB_USER = "postgres";
-    private static final String DB_PASSWORD = "admin";
-
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         String nombre = request.getParameter("nombre");
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
@@ -28,7 +26,14 @@ public class GuardarServlet extends HttpServlet {
             return;
         }
 
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+        String databaseUrl = System.getenv("DATABASE_URL");
+        if (databaseUrl == null || databaseUrl.trim().isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.print("Error de configuración: DATABASE_URL no está definida");
+            return;
+        }
+
+        try (Connection conn = DriverManager.getConnection(databaseUrl)) {
             String sql = "INSERT INTO usuarios (nombre_usuario) VALUES (?)";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, nombre);
@@ -36,8 +41,8 @@ public class GuardarServlet extends HttpServlet {
                 out.print("Nombre guardado correctamente.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            out.print("Error al guardar en la base de datos.");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.print("Error al guardar en la base de datos: " + e.getMessage());
         }
     }
 }
