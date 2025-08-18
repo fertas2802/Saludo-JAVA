@@ -52,6 +52,24 @@
       <version>5.10.1</version>
       <scope>test</scope>
     </dependency>
+
+<!-- Dependencias adicionales de Jetty -->
+    <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-util</artifactId>
+        <version>${jetty.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-util-ajax</artifactId>
+        <version>${jetty.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-slf4j-impl</artifactId>
+        <version>${jetty.version}</version>
+    </dependency>
+
   </dependencies>
 
   <build>

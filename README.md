@@ -36,6 +36,9 @@ A simple Java web application that greets users and saves their names to a Postg
 0. Setear variable de entorno DATABASE_URL
 - Powershell (local): 
     $env:DATABASE_URL = "jdbc:postgresql://localhost:5432/postgres?user=postgres&password=admin"
+- Bash (local):
+    export DATABASE_URL="jdbc:postgresql://localhost:5432/postgres?user=postgres&password=admin"
+
 - Environment Variable (Cloud)
     ##formato jdbc:postgresql://[HOST_RENDER]:5432/[NOMBRE_DB]?user=[USUARIO]&password=[CONTRASEÑA]&sslmode=require
               jdbc:postgresql://dpg-d2d74njuibrs739askp0-a.oregon-postgres.render.com:5432/postgres_y4t6?user=postgres_y4t6_user&password=clYNAKL6IEDBhLuLoAe6PkqGZxpysdDu&sslmode=require
