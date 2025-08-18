@@ -34,8 +34,11 @@ A simple Java web application that greets users and saves their names to a Postg
 
 ## How to Build and Run
 0. Setear variable de entorno DATABASE_URL
-- Powershell: 
+- Powershell (local): 
     $env:DATABASE_URL = "jdbc:postgresql://localhost:5432/postgres?user=postgres&password=admin"
+- Environment Variable (Cloud)
+    ##formato jdbc:postgresql://[HOST_RENDER]:5432/[NOMBRE_DB]?user=[USUARIO]&password=[CONTRASEÑA]&sslmode=require
+              jdbc:postgresql://dpg-d2d74njuibrs739askp0-a.oregon-postgres.render.com:5432/postgres_y4t6?user=postgres_y4t6_user&password=clYNAKL6IEDBhLuLoAe6PkqGZxpysdDu&sslmode=require
 1. Build: `mvn clean package`
 2. Run: `mvn exec:java`
 3. Visit [http://localhost:8080](http://localhost:8080)
