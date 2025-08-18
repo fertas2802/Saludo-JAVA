@@ -17,7 +17,6 @@ public class Main {
         // Servlets de la app
         handler.addServlet(new ServletHolder(new HelloServlet()), "/hola");
         handler.addServlet(new ServletHolder(new GuardarServlet()), "/guardar");
-        handler.addServlet(new ServletHolder(new PersonalHelloServlet()), "/personalHola");
 
         // Servir estáticos desde el classpath: src/main/resources/static (empaquetado en el JAR)
         handler.setBaseResource(Resource.newClassPathResource("/static"));

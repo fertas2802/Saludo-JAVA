@@ -59,6 +59,7 @@ Aplicación web sencilla desarrollada en Java utilizando Servlets y Jetty como s
     jdbc:postgresql://localhost:5432/postgres?user=postgres&password=admin&ssl=false
 - Cloud (Render u otro host):  
     jdbc:postgresql://<HOST>:<PORT>/<DB>?user=<USER>&password=<PASSWORD>
+    `PORT` debe configurarse tambien en 8080 para Cloud.
 
 - Tabla requerida:
 ```sql
@@ -75,27 +76,28 @@ org.postgresql:postgresql:42.7.3
 org.junit.jupiter:junit-jupiter:5.10.1 (test)
 org.eclipse.jetty:jetty-util, jetty-util-ajax, jetty-slf4j-impl
 
-Compilar y Correr Local
-Definir variable de entorno para la DB local:
-Windows (PowerShell):
-    $env:DATABASE_URL="jdbc:postgresql://localhost:5432/postgres?user=postgres&password=admin&ssl=false"
-Linux / macOS (Bash):
-    export DATABASE_URL="jdbc:postgresql://localhost:5432/postgres?user=postgres&password=admin&ssl=false"
+Compilar y Correr Local:
+    Definir variable de entorno para la DB local:
+    Windows (PowerShell):
+        $env:DATABASE_URL="jdbc:postgresql://localhost:5432/postgres?user=postgres&password=admin&ssl=false"
+    Linux / macOS (Bash):
+        export DATABASE_URL="jdbc:postgresql://localhost:5432/postgres?user=postgres&password=admin&ssl=false"
 
-Compilar con Maven local (Bash):
-    mvn clean package
-Ejecutar la app (Bash):
-    java -jar target/HolaMundoServlet-1.0-SNAPSHOT.jar
-Probar endpoints:
-    GET /hola
-    curl http://localhost:8080/hola
-    POST /guardar
-    curl -X POST -d "nombre=Fernando" http://localhost:8080/guardar
+    Compilar con Maven local (Bash):
+        mvn clean package
+    Ejecutar la app (Bash):
+        java -jar target/HolaMundoServlet-1.0-SNAPSHOT.jar
+    Probar endpoints:
+        GET /hola
+        curl http://localhost:8080/hola
+        POST /guardar
+        curl -X POST -d "nombre=Fernando" http://localhost:8080/guardar
 
 Deploy en Cloud (Render):
 Crear un Web Service en Render usando Docker.
 Conectar el repositorio público de GitHub.
 Configurar variable de entorno DATABASE_URL para la base de datos cloud.
+Configurar variable de entorno PORT = 8080
 Render detectará el Dockerfile y construirá la imagen:
     # Etapa de build
     FROM maven:3.9.2-eclipse-temurin-17 AS build

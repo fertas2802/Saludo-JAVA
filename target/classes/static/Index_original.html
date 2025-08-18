@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Saludo App</title>
+</head>
+<body>
+  <h1>Bienvenido a la App de Saludo</h1>
+  
+  <h2>Saludo personalizado</h2>
+  <form action="/personalHola" method="get">
+    <label for="nombre">Ingrese su nombre:</label>
+    <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+    <button type="submit">Saludar</button>
+  </form>
+
+  <ul>
+    <li><a href="/hola">/hola</a> — saludo (GET)</li>
+    <li>/guardar — insertar en BD (POST)</li>
+  </ul>
+  
+  <p>Probar POST (ejemplo curl):</p>
+  <pre>curl -X POST -d "nombre=Fernando" https://TU-URL/guardar</pre>
+</body>
+</html>
