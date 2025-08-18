@@ -1,50 +1,117 @@
-# JAVA SALUDO SERVLET WEBAPP
+# Saludo Servlet Java
 
 ## Overview
-A simple Java web application that greets users and saves their names to a PostgreSQL database using servlets and Jetty.
+Aplicación web sencilla desarrollada en Java utilizando Servlets y Jetty como servidor embebido. Permite mostrar un saludo y guardar nombres en una base de datos PostgreSQL. Funciona tanto **localmente** como en **Render** mediante Docker.
+
+---
 
 ## Features
-- Greet users by name via a servlet endpoint.
-- Save user names to a PostgreSQL table (`usuarios`).
 
-## Technologies
-- Java 11
-- Servlets (javax.servlet)
-- Jetty (embedded web server)
-- Maven (build and dependency management)
-- PostgreSQL (database)
-- HTML/JavaScript frontend
+- `/hola` — endpoint **GET** que devuelve un saludo en HTML.
+- `/guardar` — endpoint **POST** que recibe un parámetro `nombre` y lo inserta en la tabla `personas` de PostgreSQL.
+- Compatible con ejecución local y cloud (Render).
+- Logging profesional mediante **SLF4J**.
+- Manejo de errores y validación de parámetros.
 
-## Project Structure
-- `src/main/java/` — Java source code (servlets, main class)
-- `src/main/webapp/` — Frontend files (`index.html`, `scripts.js`)
-- `pom.xml` — Maven configuration
-- `target/` — Compiled classes and build artifacts (auto-generated)
+---
 
-## Key Dependencies
-- `org.eclipse.jetty:jetty-server` and `jetty-servlet`: Embedded server and servlet support
-- `javax.servlet:javax.servlet-api`: Servlet API
-- `org.postgresql:postgresql`: PostgreSQL JDBC driver
-- `junit:junit`: For unit testing (optional)
+## Tecnologías
 
-## Database
+- Java 17
+- Jetty 11 (Servidor embebido)
+- Servlets (Jakarta EE)
 - PostgreSQL
-- Table: `usuarios` with column `nombre_usuario`
-- Connection configured in `GuardarServlet.java`
+- Maven (Gestión de dependencias y build)
+- SLF4J (Logging)
+- Docker (Despliegue en cloud)
 
-## How to Build and Run
-0. Setear variable de entorno DATABASE_URL
-- Powershell (local): 
-    $env:DATABASE_URL = "jdbc:postgresql://localhost:5432/postgres?user=postgres&password=admin"
-- Bash (local):
-    export DATABASE_URL="jdbc:postgresql://localhost:5432/postgres?user=postgres&password=admin"
+---
 
-- Environment Variable (Cloud)
-    ##formato jdbc:postgresql://[HOST_RENDER]:5432/[NOMBRE_DB]?user=[USUARIO]&password=[CONTRASEÑA]&sslmode=require
-              jdbc:postgresql://dpg-d2d74njuibrs739askp0-a.oregon-postgres.render.com:5432/postgres_y4t6?user=postgres_y4t6_user&password=clYNAKL6IEDBhLuLoAe6PkqGZxpysdDu&sslmode=require
-1. Build: `mvn clean package`
-2. Run: `mvn exec:java`
-3. Visit [http://localhost:8080](http://localhost:8080)
+## Estructura del Proyecto
 
-## Author
-Fernando
+.
+├── src/
+│ └── main/
+│ ├── java/
+│ │ ├── Main.java
+│ │ ├── HelloServlet.java
+│ │ └── GuardarServlet.java
+│ └── resources/
+├── target/
+│ └── HolaMundoServlet-1.0-SNAPSHOT.jar
+├── pom.xml
+└── Dockerfile
+
+
+- `Main.java` — Punto de entrada, configura Jetty y los servlets.  
+- `HelloServlet.java` — Endpoint `/hola`.  
+- `GuardarServlet.java` — Endpoint `/guardar` con conexión a PostgreSQL y compatibilidad local/cloud.  
+- `Dockerfile` — Permite build y deploy en Render usando Docker.  
+- `pom.xml` — Dependencias y plugins Maven.  
+
+---
+
+## Acceso a Base de Datos
+
+- Se utiliza **PostgreSQL**.  
+- La conexión se define mediante la variable de entorno `DATABASE_URL`.  
+- Local:  
+    jdbc:postgresql://localhost:5432/postgres?user=postgres&password=admin&ssl=false
+- Cloud (Render u otro host):  
+    jdbc:postgresql://<HOST>:<PORT>/<DB>?user=<USER>&password=<PASSWORD>
+
+- Tabla requerida:
+```sql
+CREATE TABLE usuarios (
+  id SERIAL PRIMARY KEY,
+  nombre_usuario TEXT NOT NULL
+);
+
+Dependencias Principales (pom.xml)
+org.eclipse.jetty:jetty-server:11.0.20
+org.eclipse.jetty:jetty-servlet:11.0.20
+jakarta.servlet:jakarta.servlet-api:6.0.0
+org.postgresql:postgresql:42.7.3
+org.junit.jupiter:junit-jupiter:5.10.1 (test)
+org.eclipse.jetty:jetty-util, jetty-util-ajax, jetty-slf4j-impl
+
+Compilar y Correr Local
+Definir variable de entorno para la DB local:
+Windows (PowerShell):
+    $env:DATABASE_URL="jdbc:postgresql://localhost:5432/postgres?user=postgres&password=admin&ssl=false"
+Linux / macOS (Bash):
+    export DATABASE_URL="jdbc:postgresql://localhost:5432/postgres?user=postgres&password=admin&ssl=false"
+
+Compilar con Maven local (Bash):
+    mvn clean package
+Ejecutar la app (Bash):
+    java -jar target/HolaMundoServlet-1.0-SNAPSHOT.jar
+Probar endpoints:
+    GET /hola
+    curl http://localhost:8080/hola
+    POST /guardar
+    curl -X POST -d "nombre=Fernando" http://localhost:8080/guardar
+
+Deploy en Cloud (Render):
+Crear un Web Service en Render usando Docker.
+Conectar el repositorio público de GitHub.
+Configurar variable de entorno DATABASE_URL para la base de datos cloud.
+Render detectará el Dockerfile y construirá la imagen:
+    # Etapa de build
+    FROM maven:3.9.2-eclipse-temurin-17 AS build
+    WORKDIR /app
+    COPY pom.xml .
+    RUN mvn dependency:go-offline
+    COPY src/ src/
+    RUN mvn clean package
+
+    # Etapa de ejecución
+    FROM eclipse-temurin:17-jre
+    WORKDIR /app
+    COPY --from=build /app/target/HolaMundoServlet-1.0-SNAPSHOT.jar app.jar
+    EXPOSE 8080
+    CMD ["java", "-jar", "app.jar"]
+Al finalizar el deploy, acceder a la URL de Render:
+/hola → saludo
+/guardar → POST con nombre
+
