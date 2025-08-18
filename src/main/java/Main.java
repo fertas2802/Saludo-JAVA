@@ -1,6 +1,11 @@
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.DefaultServlet;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
+
 public class Main {
     public static void main(String[] args) throws Exception {
-        // Render define el puerto en la variable de entorno PORT
+        // Usar el puerto de Render o 8080 en local
         int port = Integer.parseInt(System.getenv().getOrDefault("PORT", "8080"));
         Server server = new Server(port);
 
