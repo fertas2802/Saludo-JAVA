@@ -33,6 +33,9 @@ A simple Java web application that greets users and saves their names to a Postg
 - Connection configured in `GuardarServlet.java`
 
 ## How to Build and Run
+0. Setear variable de entorno DATABASE_URL
+- Powershell: 
+    $env:DATABASE_URL = "jdbc:postgresql://localhost:5432/postgres?user=postgres&password=admin"
 1. Build: `mvn clean package`
 2. Run: `mvn exec:java`
 3. Visit [http://localhost:8080](http://localhost:8080)
