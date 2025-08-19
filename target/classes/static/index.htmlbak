@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Saludo App</title>
+</head>
+<body>
+  <h1>Bienvenido a la App de Saludo</h1>
+
+  <!-- Formulario principal -->
+  <form method="GET" action="/hola" style="margin-bottom: 20px;">
+    <label for="nombre">Ingrese su nombre:</label>
+    <input type="text" id="nombre" name="nombre" required />
+
+    <!-- Botón para enviar a HelloServlet -->
+    <button type="submit">Saludar</button>
+  </form>
+
+  <!-- Segundo formulario para guardar en BD -->
+  <form method="POST" action="/guardar">
+    <!-- Usamos el mismo campo de nombre -->
+    <input type="hidden" id="nombreHidden" name="nombre" />
+
+    <!-- Botón que copia el valor del input al hidden y envía el formulario -->
+    <button type="button" onclick="guardarNombre()">Guardar</button>
+  </form>
+
+  <hr />
+  <!--
+    <ul>
+      <li><a href="/hola">/hola</a> — saludo (GET)</li>
+      <li>/guardar — insertar en BD (POST)</li>
+    </ul>
+    <p>Probar POST (ejemplo curl):</p>
+    <pre>curl -X POST -d "nombre=Fernando" https://TU-URL/guardar</pre>
+  -->
+  <script>
+    function guardarNombre() {
+      const nombre = document.getElementById("nombre").value;
+      if (!nombre) {
+        alert("Debe ingresar un nombre primero.");
+        return;
+      }
+      document.getElementById("nombreHidden").value = nombre;
+      document.forms[1].submit(); // envía el segundo formulario (POST /guardar)
+    }
+  </script>
+</body>
+</html>
